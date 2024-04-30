@@ -4,7 +4,7 @@ require("dotenv").config();
 exports.protectRoute= async(req,res,next)=>{
   try {
       const token =req.cookies.jwt;
-      console.log(token);
+    //   console.log(token);
       if(!token)return res.status(400).json({error:"Unauthorized - No token Provided"});
 
       const decode = jwt.verify(token,process.env.JWT_TOKEN);
