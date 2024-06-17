@@ -10,7 +10,7 @@ const useSignup=()=>{
         if(!success)return;
         setLoading(true);
         try{
-            const res=await fetch('http://localhost:8000/api/v1/auth/signup',{
+            const res=await fetch('/api/v1/auth/signup',{
                 method:"POST",
                 headers: {"Content-Type":"application/json"},
                 body:JSON.stringify({fullName,username,password,confirmPassword,gender})
