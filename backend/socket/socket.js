@@ -11,7 +11,7 @@ const httpserver =http.createServer(app);
 const userSocketMap ={}; // {userId:socketId}
 const io=new Server(httpserver,{
     cors:{
-        origin:["http://localhost:3000"],
+        origin:["https://chatapp-o7p4.onrender.com"],
         methods:["GET","POST"],
     }
 })
