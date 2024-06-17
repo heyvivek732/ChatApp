@@ -1,22 +1,26 @@
-const express= require("express");
-const app=express();
-const cookieParser =require("cookie-parser");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const bodyParser = require('body-parser')
+const {app,httpserver} =require('./socket/socket.js')
 require("dotenv").config();
 
-app.use(express.json());
+app.use(bodyParser.json())
 app.use(cookieParser());
-const port=process.env.PORT || 5000;
+app.use(express.json());
+const port = process.env.PORT || 5000;
 
-const authRoutes= require('./routes/auth.route');
-const messageRoutes =require('./routes/message.routes');
-const userRouter=require('./routes/user.route');
-app.use('/api/v1/auth',authRoutes);
-app.use('/api/v1/messages',messageRoutes);
-app.use('/api/v1/users',userRouter);
+const authRoutes = require('./routes/auth.route');
+const messageRoutes = require('./routes/message.routes');
+const userRouter = require('./routes/user.route');
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/users', userRouter);
 
-app.listen(port,(req,res)=>{
+httpserver.listen(port, (req, res) => {
 
 })
 
-const connectdb =require('./Config/database');
+const connectdb = require('./Config/database');
+const { server } = require("./socket/socket");
 connectdb();

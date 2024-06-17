@@ -1,28 +1,32 @@
 const express =require("express");
 const User =require('../models/user.models');
 const bcryptjs =require('bcryptjs');
-const generateTokenAndSetCookie=require("../utils/generateTokens");
+const jwt =require("jsonwebtoken")
+const {generateTokenAndSetCookie}=require("../utils/generateTokens");
+require("dotenv").config();
 exports.loginController = async(req,res)=>{
     try {
         const {username,password} = req.body;
         const user = await User.findOne({username});
-        const isCorrectPass= await bcryptjs.compare(password,user.password || "");
-        if(!user){
-            return res.status(500).json({error:"Invalid User Id"})
+        const isCorrectPass= await bcryptjs.compare(password,user?.password || "");
+        if(!user || !isCorrectPass){
+            return res.status(400).json({error:"Invalid username or password"});
         }
-        else if(!isCorrectPass){
-            return res.status(500).json({error:"Please Enter correct password"});
-        }
-        generateTokenAndSetCookie(user._id,res);
+       
+            generateTokenAndSetCookie(user._id,res)
+            
         res.status(200).json({
             success:true,
+            _id:user._id,
             fullName:user.fullName,
             username:user.username,
             gender:user.gender,
             profilePic:user.profilePic,
             message:"Succefully Login"
         })
+        console.log("Hellow")
     } catch (error) {
+        console.log("hwllo");
         return res.status(500).json({error:error.message});
     }
 }
@@ -54,7 +58,7 @@ exports.singnUpController =async(req,res)=>{
         })
 
         if(newUser){
-            await generateTokenAndSetCookie(newUser._id,res);
+             generateTokenAndSetCookie(newUser._id,res);
             await newUser.save();
 
         res.status(200).json({
@@ -79,6 +83,6 @@ exports.logOutController = async(req,res)=>{
        res.status(200).json({message:"Succefully Logout"})
     } catch (error) {
         console.error(error.message);
-        return res.status(500).json({error:"Error While LogOut"});
+        return res.status(500).json({error:"Error While a LogOut"});
     }
 }
